@@ -7,8 +7,8 @@
 
 import Foundation
 
-protocol ReadListModelViewProtocol: ReaderModuleViewModelProtocol {
-    var updateViewData: ((ReadListViewData) -> ())? { get set }
+protocol ReadListModelViewProtocol: CommonViewModelProtocol {
+    var updateViewData: ((ReaderListViewData) -> ())? { get set }
     
     func viewDidLoad()
     func filterTypeDidChange(_ newType: ReaderFilteringType)
@@ -18,7 +18,7 @@ protocol ReadListModelViewProtocol: ReaderModuleViewModelProtocol {
 final class ReadListModelView: ReadListModelViewProtocol {
     
     private var coordinator: ReadersCoordinatorProtocol?
-    var updateViewData: ((ReadListViewData) -> ())?
+    var updateViewData: ((ReaderListViewData) -> ())?
     
     private var readers: [ReaderData]
     private var navBarData: NavBarData = {
@@ -33,6 +33,7 @@ final class ReadListModelView: ReadListModelViewProtocol {
     }
     
     func viewDidLoad() {
+        readers = ReaderData.mockReaders
         updateViewData?(.initial(navBarData, readers))
     }
     

@@ -6,22 +6,18 @@
 //
 
 import Foundation
+import UIKit
 
-protocol ReadersCoordinatorProtocol {
-    func  openReaderEditor()
+protocol ReadersCoordinatorProtocol: CommonCoordinatorProtocol {
+    func openReaderEditor()
     func popViewController()
 }
-
-protocol ReaderModuleViewProtocol {
-    func setViewModel(_ viewModel: ReaderModuleViewModelProtocol)
-}
-
-protocol ReaderModuleViewModelProtocol {}
 
 final class ReadersCoordinator: BaseCoordinator {
     
     private let factory: ReadersFactoryProtocol
     private let router: Routable
+    private var rootView: UINavigationController?
     
     init(factory: ReadersFactoryProtocol, router: Routable) {
         self.factory = factory
@@ -33,12 +29,17 @@ extension ReadersCoordinator: Coordinatable {
     func start() {
         performFlow()
     }
+    
+    func generateViewController() -> UINavigationController {
+        let readersListView = factory.makeReadersView(coordinator: self)
+        self.rootView = readersListView
+        return readersListView
+    }
 }
 
 private extension ReadersCoordinator {
     func performFlow() {
-        let readersListView = factory.makeReadersView(coordinator: self)
-        router.setRootModule(readersListView as? Presentable)
+        router.setRootModule(rootView as? Presentable)
     }
 }
 
@@ -50,6 +51,11 @@ extension ReadersCoordinator: ReadersCoordinatorProtocol {
     
     func popViewController() {
         router.popModule(animated: true)
+    }
+
+    
+    func getNavigationController() -> UINavigationController? {
+        return rootView
     }
 }
 

@@ -9,7 +9,7 @@ import UIKit
 
 final class ReadersListViewController: UIViewController {
     
-    private let navigationBar: NavigationBar = NavigationBar()
+    private let navigationBar: CustomNavigationBar = CustomNavigationBar()
     private let filterButton: UIButton = UIButton()
     private let tableView: UITableView = UITableView()
     
@@ -34,6 +34,7 @@ final class ReadersListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel?.viewDidLoad()
         setupView()
     }
     
@@ -51,8 +52,8 @@ final class ReadersListViewController: UIViewController {
 }
 
 
-extension ReadersListViewController: ReaderModuleViewProtocol {
-    func setViewModel(_ viewModel: ReaderModuleViewModelProtocol) {
+extension ReadersListViewController: CommonViewProtocol {
+    func setViewModel(_ viewModel: CommonViewModelProtocol) {
         guard let viewModel = viewModel as? ReadListModelViewProtocol else { return }
         self.viewModel = viewModel
         
@@ -96,12 +97,7 @@ private extension ReadersListViewController {
     func setupNavigationBar() {
         self.view.addSubview(navigationBar)
         navigationBar.translatesAutoresizingMaskIntoConstraints = false
-        
-        let heightConst = navigationBar.heightAnchor.constraint(equalToConstant: 110)
-        let widthConst = navigationBar.widthAnchor.constraint(equalToConstant: self.view.frame.width)
-        let topConst = navigationBar.topAnchor.constraint(equalTo: self.view.topAnchor)
-        let centerXConst = navigationBar.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
-        self.view.addConstraints([heightConst, widthConst, topConst, centerXConst])
+        navigationBar.setupDefaultNavBar(for: self.view)
     }
     
     private func setupFilterButton() {

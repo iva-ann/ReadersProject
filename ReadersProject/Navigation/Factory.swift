@@ -6,6 +6,12 @@
 //
 
 import Foundation
+import UIKit
+
+protocol CoordinatorFactoryProtocol {
+    func makeReadersCoordinator(with router: Routable) -> CommonCoordinatorProtocol
+    func makeBooksCoordinator(with router: Routable) -> CommonCoordinatorProtocol
+}
 
 final class CoordinatorFactory {
     private let moduleFactory: ModuleFactory = ModuleFactory()
@@ -13,31 +19,51 @@ final class CoordinatorFactory {
 }
 
 extension CoordinatorFactory: CoordinatorFactoryProtocol {
-    func makeReadersCoordinator(with router: Routable) -> Coordinatable & ReadersCoordinatorProtocol {
+    func makeReadersCoordinator(with router: Routable) -> CommonCoordinatorProtocol {
         return ReadersCoordinator(factory: moduleFactory, router: router)
+    }
+    
+    func makeBooksCoordinator(with router: Routable) -> CommonCoordinatorProtocol {
+        return BooksCoordinator(factory: moduleFactory, router: router)
     }
 }
 
 protocol ReadersFactoryProtocol {
-    func makeReadersView(coordinator: ReadersCoordinatorProtocol) -> ReaderModuleViewProtocol
-    func makeReaderEditorView(coordinator: ReadersCoordinatorProtocol) -> ReaderModuleViewProtocol
+    func makeReadersView(coordinator: ReadersCoordinatorProtocol) -> UINavigationController
+    func makeReaderEditorView(coordinator: ReadersCoordinatorProtocol) -> CommonViewProtocol
 }
+
+protocol BooksFactoryProtocol {
+    func makeBooksView(coordinator: BooksCoordinatorProtocol) -> UINavigationController
+}
+
 
 final class ModuleFactory {}
 
 extension ModuleFactory: ReadersFactoryProtocol {
-    func makeReadersView(coordinator: ReadersCoordinatorProtocol) -> ReaderModuleViewProtocol {
-        let view: ReaderModuleViewProtocol = ReadersListViewController()
+    func makeReadersView(coordinator: ReadersCoordinatorProtocol) -> UINavigationController {
+        let view = ReadersListViewController()
         let viewModel: ReadListModelViewProtocol = ReadListModelView(coordinator: coordinator)
         view.setViewModel(viewModel)
-        return view
+        let navigationController = UINavigationController(rootViewController: view)
+        return navigationController
     }
     
-    func makeReaderEditorView(coordinator: ReadersCoordinatorProtocol) -> ReaderModuleViewProtocol {
-        let view: ReaderModuleViewProtocol = ReaderEditorViewController()
+    func makeReaderEditorView(coordinator: ReadersCoordinatorProtocol) -> CommonViewProtocol {
+        let view = ReaderEditorViewController()
         let viewModel: ReaderEditorViewModelProtocol = ReaderEditorViewModel(coordinator: coordinator)
         view.setViewModel(viewModel)
         return view
+    }
+}
+
+extension ModuleFactory: BooksFactoryProtocol {
+    func makeBooksView(coordinator: BooksCoordinatorProtocol) -> UINavigationController {
+        let view = BooksListViewController()
+        let viewModel: BooksListModelViewProtocol = BooksListModelView(coordinator: coordinator)
+        view.setViewModel(viewModel)
+        let navigationController = UINavigationController(rootViewController: view)
+        return navigationController
     }
 }
 

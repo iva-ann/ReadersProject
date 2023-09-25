@@ -9,6 +9,21 @@ import UIKit
 
 protocol Coordinatable: AnyObject {
     func start()
+    func generateViewController() -> UINavigationController
+}
+
+extension Coordinatable {
+    func generateViewController() -> UINavigationController { return UINavigationController() }
+}
+
+protocol CommonViewProtocol {
+    func setViewModel(_ viewModel: CommonViewModelProtocol)
+}
+
+protocol CommonViewModelProtocol {}
+
+protocol CommonCoordinatorProtocol: Coordinatable {
+    func getNavigationController() -> UINavigationController?
 }
 
 protocol Routable: Presentable {
@@ -26,6 +41,7 @@ protocol Routable: Presentable {
     func dismissModule()
     func dismissModule(animated: Bool, completion: CompletionBlock?)
     
+    func setNavigationController(_ controller: UINavigationController?)
     func setRootModule(_ module: Presentable?)
     func setRootModule(_ module: Presentable?, hideBar: Bool)
     

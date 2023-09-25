@@ -24,11 +24,11 @@ private extension AppDelegate {
     func makeCoordinator() -> Coordinatable {
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        let rootNavigation = UINavigationController()
+        let rootNavigation = UITabBarController()
         window?.rootViewController = rootNavigation
         window?.makeKeyAndVisible()
 
         return AppCoordinator(factory: CoordinatorFactory(),
-                              router: Router(rootController: rootNavigation))
+                              tabBarController: rootNavigation)
     }
 }

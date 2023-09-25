@@ -7,11 +7,12 @@
 
 import Foundation
 
-protocol ReaderEditorViewModelProtocol: ReaderModuleViewModelProtocol {
+protocol ReaderEditorViewModelProtocol: CommonViewModelProtocol {
     var updateViewData: ((ReaderEditorViewData) -> ())? { get set }
     
     func viewDidLoad()
     func backButtonTapped()
+    func saveButtonTapped(name: String, dateOfBirth: String)
 }
 
 final class ReaderEditorViewModel: ReaderEditorViewModelProtocol {
@@ -33,6 +34,14 @@ final class ReaderEditorViewModel: ReaderEditorViewModelProtocol {
     }
     
     func backButtonTapped() {
+        coordinator?.popViewController()
+    }
+    
+    func saveButtonTapped(name: String, dateOfBirth: String) {
+        let newModel = ReaderData(readerName: name,
+                                  dateOfBirth: dateOfBirth,
+                                  state: .noBooks)
+        ReaderData.mockReaders.append(newModel)
         coordinator?.popViewController()
     }
 }

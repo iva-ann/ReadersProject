@@ -22,7 +22,7 @@ enum NavBarActionType {
     case back
 }
 
-final class NavigationBar: UIView {
+final class CustomNavigationBar: UIView {
     
     private let title: UILabel = UILabel()
     private let actionButton: UIButton = UIButton()
@@ -105,5 +105,18 @@ final class NavigationBar: UIView {
     @objc
     private func backButtonTapped() {
         actionCompletion?(.back)
+    }
+}
+
+extension CustomNavigationBar {
+    func setupDefaultNavBar(for superView: UIView) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.snp.makeConstraints {
+            $0.height.equalTo(110)
+            $0.width.equalTo(superView.snp.width)
+            $0.top.equalTo(superView.snp.top)
+            $0.centerX.equalTo(superView.snp.centerX)
+        }
     }
 }

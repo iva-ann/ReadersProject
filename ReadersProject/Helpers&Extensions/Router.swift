@@ -19,7 +19,7 @@ final class Router: NSObject {
     
     fileprivate var completions: RouterCompletions
     
-    init(rootController: UINavigationController) {
+    init(rootController: UINavigationController? = nil) {
         self.rootController = rootController
         completions = [:]
     }
@@ -87,14 +87,18 @@ extension Router: Routable {
         rootController?.dismiss(animated: animated, completion: completion)
     }
     
+    func setNavigationController(_ controller: UINavigationController?) {
+        self.rootController = controller
+    }
+    
     func setRootModule(_ module: Presentable?) {
         setRootModule(module, hideBar: false)
     }
     
     func setRootModule(_ module: Presentable?, hideBar: Bool) {
-        guard let controller = module?.toPresent else { return }
-        rootController?.setViewControllers([controller], animated: false)
-        rootController?.isNavigationBarHidden = hideBar
+//        guard let controller = module?.toPresent else { return }
+//        rootController?.setViewControllers([controller], animated: false)
+//        rootController?.isNavigationBarHidden = hideBar
     }
     
     func popToRootModule(animated: Bool) {

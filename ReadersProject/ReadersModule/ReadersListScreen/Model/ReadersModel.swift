@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-enum ReadListViewData {
+enum ReaderListViewData {
     case initial(NavBarData, [ReaderData])
     case updateTable(String, [ReaderData])
 }
@@ -50,7 +50,7 @@ enum ReaderState: Int {
 }
 
 extension ReaderData {
-    static let mockReaders: [ReaderData] = [
+    static var mockReaders: [ReaderData] = [
     ReaderData(readerName: "Черкасов Артур Всеволодович-Черкасов",
                dateOfBirth: "15.05.2001",
                state: .overdueBook),
